@@ -22,15 +22,15 @@ async def on_ready():
     """
     print(f"{bot.user} Online now!")
 
-@bot.event
-async def on_message(msg):
-    """
-    當 bot 收到聊天室的訊息
-    """
-    if msg.author == bot.user:
-        return
-    if msg.content.startswith('hello'):
-        await msg.channel.send(f"hi {msg.author}")
+# @bot.event
+# async def on_message(msg):
+#     """
+#     當 bot 收到聊天室的訊息 會和 command 牴觸
+#     """
+#     if msg.author == bot.user:
+#         return
+#     if msg.content.startswith('hello'):
+#         await msg.channel.send(f"hi {msg.author}")
 
 @bot.event
 async def on_message_delete(msg):
@@ -75,14 +75,10 @@ async def on_member_update(before, after):
         print(f"{after.name} 禁用了DM")
 
 
+@bot.command(aliases=["hi", "yo"])
+async def hello(ctx):
+    await ctx.send("hi")
 
-@bot.command()
-async def test(ctx, arg):
-    await ctx.send(arg) 
 
-from typing import Literal
-@bot.command()
-async def shop(ctx, buy_sell: Literal['buy', 'sell'], amount: Literal[1, 2], *, item: str):
-    await ctx.send(f'{buy_sell.capitalize()}ing {amount} {item}(s)!')
 
 bot.run(token=BOT_TOKEN)
