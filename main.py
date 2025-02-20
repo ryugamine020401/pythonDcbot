@@ -57,6 +57,15 @@ async def on_ready():
     change_bot_status.start()
     send_webhook_report.start()
 
+    try:
+        synced_command = await bot.tree.sync()
+        print(f"synced {len(synced_command)} comand.")
+    except Exception as e:
+        print(f"main.py Error 64 {e}")
+
+@bot.tree.command(name="helloworld", description="Hello World!!!!!")
+async def hi(interaction: discord.Interaction):
+    await interaction.response.send_message(f"{interaction.user.mention} hello!!", ephemeral=True)
 
 async def Load():
     """
