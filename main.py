@@ -26,7 +26,7 @@ bot_status = cycle(["尖尖挖嘎乃", "嗚啦", "チャルメラ"])
 async def change_bot_status():
     await bot.change_presence(activity=discord.Game(next(bot_status)))
 
-@tasks.loop(minutes=600)  # 每 60 秒執行一次
+@tasks.loop(minutes=60000)  # 每 60 秒執行一次
 async def send_webhook_report():
     """
     透過 Webhook 發送伺服器監控報告
@@ -60,6 +60,7 @@ async def init_db():
             CREATE TABLE IF NOT EXISTS userdata (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 dc_user_uid INTEGER NOT NULL UNIQUE,
+                reminder INTEGER DEFAULT 3        
                 username TEXT NOT NULL
             )
         """)
@@ -105,7 +106,7 @@ async def main():
         await bot.start(token = BOT_TOKEN)
 
 
-@tasks.loop(minutes=1440)
+@tasks.loop(minutes=14400)
 async def check_limit():
     """
     從 SQLite 資料庫中獲取所有註冊的 dc_user_uid，並私訊該用戶
@@ -123,7 +124,7 @@ async def check_limit():
     dict_user_id = {dc_username : dc_user_id for dc_user_id, dc_username in users}
     async with aiohttp.ClientSession() as session:
             try:
-                async with session.post("http://35.229.237.202:38777/api/ProductsManager/dc_get_product/", json=payload) as response:
+                async with session.post("https://35.229.237.202/api/ProductsManager/dc_get_product/", json=payload) as response:
                     if response.status == 200:
                         data = await response.json()
                         pass

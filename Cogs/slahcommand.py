@@ -45,7 +45,7 @@ class SlashCommandCog(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             try:
-                async with session.post("http://35.229.237.202:38777/api/UsersManager/dc_register_user/", json=payload) as response:
+                async with session.post("https://35.229.237.202/api/UsersManager/dc_register_user/", json=payload) as response:
                     if response.status == 200:
                         async with aiosqlite.connect(DB) as db:
                             async with db.execute(
